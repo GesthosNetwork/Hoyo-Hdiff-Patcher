@@ -8,28 +8,28 @@ set newVer=1.2.0
 
 set PatchFinished=False
 
-for %%f in ("Cleanup_!oldVer!-!newVer!.txt" 7z.exe) do if not exist %%f (
+for %%f in (Cleanup_!oldVer!-!newVer!.txt 7z.exe) do if not exist %%f (
     echo %%f is missing. & goto End
 )
 
-for /F "usebackq delims=" %%i in ("Cleanup_!oldVer!-!newVer!.txt") do (
-    if exist "%%i" (echo Deleting "%%i" & attrib -R "%%i" & del "%%i")
+for /F "usebackq delims=" %%i in (Cleanup_!oldVer!-!newVer!.txt) do (
+    if exist %%i (echo Deleting %%i & del %%i)
 )
 
-rd /s /q blob_storage "GenshinImpact_Data\SDKCaches" "GenshinImpact_Data\webCaches" 2>nul
+rd /s /q blob_storage GenshinImpact_Data\SDKCaches GenshinImpact_Data\webCaches 2>nul
 del *.dmp *.bak *.log 2>nul
 
 for %%f in (*.zip *.7z) do (
-    7z.exe x "%%f" -o"." -y && del "%%f"
+    7z.exe x %%f -o"." -y && del %%f
 )
 
 :Empty
-set "E=0" & for /d /r "GenshinImpact_Data" %%i in (*) do (rd "%%i" 2>nul & if not exist "%%i" set "E=1")
+set E=0 & for /d /r GenshinImpact_Data %%i in (*) do (rd %%i 2>nul & if not exist %%i set E=1)
 if !E! equ 1 goto Empty
 
 set PatchFinished=True
 
-if "%PatchFinished%"=="True" (
+if %PatchFinished%==True (
   (
     echo [General]
     echo channel=1

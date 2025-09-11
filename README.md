@@ -12,6 +12,8 @@ For example, you want to update the game from 5.4.0 to 5.5.0:
    - `Start.bat`
    - `hpatchz.exe`
    - `7z.exe`
+   - `game_5.4.0_5.5.0_hdiff.zip`
+   - `audio_xx-xx_5.4.0_5.5.0_hdiff.zip`
 
 2. Run `Start.bat` and wait until the process finishes.
 3. Now, your game is updated!

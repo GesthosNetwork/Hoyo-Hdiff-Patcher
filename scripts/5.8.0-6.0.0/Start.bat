@@ -3,8 +3,8 @@ SetLocal EnableDelayedExpansion
 chcp 65001 >nul
 Title GI Hdiff Patcher © 2025 GesthosNetwork
 
-set oldVer=5.0.0
-set newVer=5.1.0
+set oldVer=5.8.0
+set newVer=6.0.0
 
 set PatchFinished=False
 
@@ -22,7 +22,7 @@ for /F "usebackq delims=" %%i in (Cleanup_!oldVer!-!newVer!.txt) do (
     if exist %%i (echo Deleting %%i & del %%i)
 )
 
-rd /s /q blob_storage GenshinImpact_Data\StreamingAssets\Audio GenshinImpact_Data\SDKCaches GenshinImpact_Data\webCaches 2>nul
+rd /s /q blob_storage ldiff GenshinImpact_Data\StreamingAssets\Audio GenshinImpact_Data\SDKCaches GenshinImpact_Data\webCaches 2>nul
 del *.dmp *.bak *.log 2>nul
 
 for %%f in (*.zip *.7z) do (
