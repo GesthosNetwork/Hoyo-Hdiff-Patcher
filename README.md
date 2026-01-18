@@ -1,4 +1,4 @@
-## GI-Hdiff Patcher: a tool for manually updating Genshin Impact properly
+## Hoyo-Hdiff-Patcher: a tool for manually updating Hoyo Games properly
 
 Copying the update files directly into the game folder is not the correct update method. You must merge the `.pck.hdiff` files with the original `.pck` files and remove the outdated files listed in `deletefiles.txt`. You can perform this process using the following tool.
 
