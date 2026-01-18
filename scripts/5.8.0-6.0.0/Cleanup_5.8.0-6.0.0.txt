@@ -1,2 +1,0 @@
-GenshinImpact_Data\StreamingAssets\VideoAssets\StandaloneWindows64\Video_Reunion_58.usm
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\11313934.blk

@@ -1,6 +1,0 @@
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\14220689.blk
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\15367449.blk
-GenshinImpact_Data\StreamingAssets\VideoAssets\StandaloneWindows64\Cs_Liyue_EQ401860901_HDJ1.usm
-GenshinImpact_Data\StreamingAssets\VideoAssets\StandaloneWindows64\Cs_Liyue_EQ401861501_HDJ2_Boy.usm
-GenshinImpact_Data\StreamingAssets\VideoAssets\StandaloneWindows64\Cs_Liyue_EQ401861501_HDJ2_Girl.usm
-GenshinImpact_Data\StreamingAssets\VideoAssets\StandaloneWindows64\Video_Reunion_53.usm

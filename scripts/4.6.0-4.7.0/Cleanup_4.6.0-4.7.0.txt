@@ -1,5 +1,0 @@
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\00109732.blk
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\00738725.blk
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\06744569.blk
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\08855756.blk
-GenshinImpact_Data\StreamingAssets\AssetBundles\blocks\00\11402413.blk
