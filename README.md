@@ -2,9 +2,12 @@
 
 Copying the update files directly into the game folder is not the correct update method. You must merge the `.pck.hdiff` files with the original `.pck` files and remove the outdated files listed in `deletefiles.txt`. You can perform this process using the following tool.
 
-## How to use
+### Requirements
+- Install [python](https://www.python.org/downloads/)
 
-1. Place the following files in the same folder as `GenshinImpact.exe`:
+### How to use
+
+1. Place the following files in the same folder as `exe` game:
    - `7z.exe`
    - `hpatchz.exe`
    - `patch.py`

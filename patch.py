@@ -61,7 +61,7 @@ def detect_game_version_after_patch(game_folder: Path) -> str | None:
         except:
             pass
 
-    version_info = game_folder / "version_info"
+    version_info = Path("version_info")
     if version_info.exists():
         try:
             data = version_info.read_text(errors="ignore")
@@ -209,6 +209,15 @@ def apply_hdiff() -> bool:
             ], check=True)
             patched = True
             log.info(f"Patched (map): {source_file} -> {target_file}")
+
+            if source_file.resolve() != target_file.resolve():
+                try:
+                    ensure_writable(source_file)
+                    source_file.unlink()
+                    log.info(f"Deleted old source file: {source_file}")
+                except Exception as e:
+                    log.warning(f"Failed to delete old source file {source_file}: {e}")
+
         except subprocess.CalledProcessError as e:
             log.error(f"hpatchz failed for {source_file}: {e}")
             raise
@@ -257,10 +266,8 @@ def read_hdiffmap_json() -> list[tuple[Path, Path, Path]]:
 
     return results
 
-
 def extract_with_7z(archive: Path):
     subprocess.run([str(Path("7z.exe").resolve()), "x", str(archive), "-o.", "-y"], check=True)
-
 
 def is_multipart_first(p: Path) -> bool:
     name = p.name.lower()
@@ -270,7 +277,6 @@ def is_multipart_first(p: Path) -> bool:
         return True
     return False
 
-
 def get_multipart_first_parts() -> list[Path]:
     out = []
     for p in Path.cwd().iterdir():
@@ -279,7 +285,6 @@ def get_multipart_first_parts() -> list[Path]:
         if is_multipart_first(p):
             out.append(p)
     return sorted(out, key=lambda p: p.name)
-
 
 def collect_parts_for_first(first: Path) -> list[Path]:
     name = first.name
@@ -298,7 +303,6 @@ def collect_parts_for_first(first: Path) -> list[Path]:
         return sorted(parts, key=lambda p: p.name)
     return [first]
 
-
 def logical_name_from_first(first: Path) -> str:
     name = first.name
     lower = name.lower()
@@ -308,7 +312,6 @@ def logical_name_from_first(first: Path) -> str:
     if lower.endswith(".part1.rar"):
         return first.name
     return first.name
-
 
 def extract_multipart_and_process(first: Path, game_folder: Path) -> bool:
     logical = logical_name_from_first(first)
@@ -326,7 +329,6 @@ def extract_multipart_and_process(first: Path, game_folder: Path) -> bool:
             pass
 
     return process_logical_archive(logical, game_folder)
-
 
 def is_part_file_name(name: str) -> bool:
     ln = name.lower()
@@ -351,13 +353,11 @@ def extract_single_archive(archive: Path):
     except:
         pass
 
-
 def parse_from_to_versions_from_name(name: str):
     m = re.search(r"_(\d+\.\d+(?:\.\d+)?)_(\d+\.\d+(?:\.\d+)?)", name)
     if m:
         return normalize_version(m.group(1)), normalize_version(m.group(2))
     return None, None
-
 
 def migrate_audio_if_needed(game_folder: Path, version_from: str | None, version_to: str | None):
     try:
@@ -397,7 +397,6 @@ def migrate_audio_if_needed(game_folder: Path, version_from: str | None, version
     log.info("Audio migration completed.")
     return True
 
-
 def process_logical_archive(archive_name: str, game_folder: Path) -> bool:
     global pending_delete_for_migration
 
@@ -428,7 +427,6 @@ def process_logical_archive(archive_name: str, game_folder: Path) -> bool:
 
     return patched
 
-
 def extract_all_multipart_and_process(game_folder: Path) -> bool:
     patched_any = False
     multipart_firsts = get_multipart_first_parts()
@@ -439,7 +437,6 @@ def extract_all_multipart_and_process(game_folder: Path) -> bool:
         except Exception as e:
             log.warning(f"Error processing multipart {first}: {e}")
     return patched_any
-
 
 def cleanup_empty_dirs(game_folder: Path):
     while True:
@@ -454,6 +451,23 @@ def cleanup_empty_dirs(game_folder: Path):
         if not removed:
             break
 
+def cleanup_empty_dirs_root():
+    root = Path.cwd()
+    while True:
+        removed = False
+        for path in sorted(root.iterdir(), reverse=True):
+            if not path.is_dir():
+                continue
+            if path.name in GAME_FOLDERS:
+                continue
+            try:
+                path.rmdir()
+                log.info(f"Deleted empty directory (root): {path}")
+                removed = True
+            except:
+                pass
+        if not removed:
+            break
 
 def write_config_ini():
     if GAME_VERSION is None:
@@ -467,7 +481,6 @@ def write_config_ini():
         ""
     ]
     Path("config.ini").write_text("\n".join(content), encoding="utf-8")
-
 
 def cleanup_aux_files(game_folder: Path):
     patterns = [
@@ -537,8 +550,8 @@ def main():
         cleanup_aux_files(game_folder)
 
     cleanup_empty_dirs(game_folder)
+    cleanup_empty_dirs_root()
     log.info("Patching finished.")
-
 
 if __name__ == "__main__":
     main()
