@@ -11,6 +11,7 @@ import os
 
 GAME_FOLDERS = [
     "GenshinImpact_Data",
+    "YuanShen_Data",
     "StarRail_Data",
     "ZenlessZoneZero_Data",
     "Client"
@@ -489,7 +490,7 @@ def cleanup_aux_files(game_folder: Path):
         "*.part1.rar", "*.part2.rar", "*.part*.rar",
         "*.7z", "*.7z.*", "*.7z.001", "*.7z.002",
         "hpatchz.exe", "hdiffz.exe", "7z.exe",
-        "version.dll", "*.dmp", "*.bak", "*.txt", "*.log"
+        "version.dll", "*.dmp", "*.bak", "*.txt", "*.log", "*.md"
     ]
 
     for pat in patterns:

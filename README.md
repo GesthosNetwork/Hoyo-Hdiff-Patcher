@@ -13,6 +13,60 @@ Copying the update files directly into the game folder is not the correct update
    - `patch.py`
    - `run.bat`
 
+   for example
+```
+├── GenshinImpact_Data/
+├── Audio_English(US)_pkg_version
+├── config.ini
+├── GenshinImpact.exe
+├── HoYoKProtect.sys
+├── mhypbase.dll
+├── pkg_version
+├── audio_en-us_6.3.0_6.4.0_hdiff.7z
+├── game_6.3.0_6.4.0_hdiff.7z
+├── 7z.exe
+├── hpatchz.exe
+├── patch.py
+├── run.bat
+```
+
+```
+├── StarRail_Data/
+├── config.ini
+├── GameAssembly.dll
+├── HoYoKProtect.sys
+├── mhypbase.dll
+├── pkg_version
+├── StarRail.exe
+├── audio_en-us_4.0.0_4.1.0_hdiff_onQOZsbZUSMXxqsB.7z
+├── game_4.0.0_4.1.0_hdiff_xvkUBFdUirbKjhAn.7z
+├── 7z.exe
+├── hpatchz.exe
+├── patch.py
+├── run.bat
+```
+
+```
+├── ZenlessZoneZero_Data/
+├── amd_ags_x64.dll
+├── amd_fidelityfx_dx12.dll
+├── Audio_English(US)_pkg_version
+├── config.ini
+├── file_category_launcher
+├── GameAssembly.dll
+├── HoYoKProtect.sys
+├── ......
+├── audio_en-us_2.6.0_2.7.0_hdiff_iFwzjdunKqmrHseM.zip
+├── game_2.6.0_2.7.0_hdiff_xAsDGeadnSffSJTY.zip
+├── UnityPlayer.dll
+├── version_info
+├── ZenlessZoneZero.exe
+├── 7z.exe
+├── hpatchz.exe
+├── patch.py
+├── run.bat
+```
+
 2. Click `run.bat` and wait until the process finishes.
 3. Now, your game is updated!
   
