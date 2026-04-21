@@ -25,7 +25,7 @@ log = logging.getLogger("hdiff-patcher")
 
 GAME_VERSION = None
 pending_delete_for_migration = False
-EXCLUDE_FILES = {"license.txt"}
+EXCLUDE_FILES = {"license.txt", "vulkan_gpu_list_config.txt", "ThirdPartyNotices.txt"}
 
 
 def detect_game_folder() -> Path:
