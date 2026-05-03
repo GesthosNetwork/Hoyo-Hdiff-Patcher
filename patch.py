@@ -35,11 +35,47 @@ EXCLUDE_FILES = {
     "nameTranslation.txt",
     "AppIdentity.txt",
     "AudioLaucherRecord.txt",
-    "DownloadedFullAssets.txt"
+    "DownloadedFullAssets.txt",
+    "BeyondAssets/BeyondAssistEditor/Resource/Font/README.md"
 }
 
-EXCLUDE_FILES_LOWER = {f.lower() for f in EXCLUDE_FILES}
+EXCLUDE_FILES_LOWER = {
+    Path(f).as_posix().replace("\\", "/").casefold().lstrip("./")
+    for f in EXCLUDE_FILES
+}
 
+def _cwd_resolved() -> Path:
+    try:
+        return Path.cwd().resolve()
+    except Exception:
+        return Path.cwd()
+
+def _path_text(p: Path) -> str:
+    return p.as_posix().replace("\\", "/").casefold().lstrip("./")
+
+def is_excluded(path: Path) -> bool:
+    name_lower = path.name.casefold()
+    if name_lower.endswith(".license.txt"):
+        return True
+
+    try:
+        candidate = path.resolve().relative_to(_cwd_resolved())
+    except Exception:
+        try:
+            candidate = path.resolve()
+        except Exception:
+            candidate = path
+
+    candidate_text = _path_text(candidate)
+
+    if candidate_text in EXCLUDE_FILES_LOWER:
+        return True
+
+    for excluded in EXCLUDE_FILES_LOWER:
+        if candidate_text.endswith("/" + excluded) or candidate_text == excluded:
+            return True
+
+    return False
 
 def detect_game_folder() -> Path:
     for folder in GAME_FOLDERS:
@@ -133,15 +169,21 @@ def replace_text_in_file(filepath: Path):
     text = text.replace('{"remoteName": "', '').replace('"}', '').replace('/', '\\')
     filepath.write_text(text, encoding="utf-8", newline="\n")
 
+
 def delete_files():
     delete_txt = Path("deletefiles.txt")
     if not delete_txt.exists():
         return
+
     replace_text_in_file(delete_txt)
+
     for line in delete_txt.read_text(encoding="utf-8").splitlines():
         target = Path(line.strip())
         if not target.exists():
             continue
+        if is_excluded(target):
+            continue
+
         make_writable_recursive(target)
         try:
             if target.is_file():
@@ -152,6 +194,7 @@ def delete_files():
                 log.info(f"Deleted directory tree: {target}")
         except Exception as e:
             log.warning(f"Failed to delete {target}: {e}")
+
     try:
         delete_txt.unlink()
     except:
@@ -304,17 +347,20 @@ def collect_parts_for_first(first: Path) -> list[Path]:
     name = first.name
     lower = name.lower()
     parts = []
+
     m = re.search(r"^(.*\.(?:7z|zip|rar))\.0*1$", lower)
     if m:
         prefix = m.group(1)
         for candidate in Path.cwd().glob(prefix + ".*"):
             parts.append(candidate)
         return sorted(parts, key=lambda p: p.name)
+
     if lower.endswith(".part1.rar"):
         prefix = name[:-len(".part1.rar")]
         for candidate in Path.cwd().glob(prefix + ".part*.rar"):
             parts.append(candidate)
         return sorted(parts, key=lambda p: p.name)
+
     return [first]
 
 def logical_name_from_first(first: Path) -> str:
@@ -327,7 +373,6 @@ def logical_name_from_first(first: Path) -> str:
         return first.name
     return first.name
 
-
 def extract_multipart_and_process(first: Path, game_folder: Path) -> bool:
     logical = logical_name_from_first(first)
     try:
@@ -339,7 +384,8 @@ def extract_multipart_and_process(first: Path, game_folder: Path) -> bool:
     parts = collect_parts_for_first(first)
     for p in parts:
         try:
-            p.unlink()
+            if not is_excluded(p):
+                p.unlink()
         except:
             pass
 
@@ -364,7 +410,8 @@ def extract_single_archive(archive: Path):
     except Exception as e:
         log.warning(f"Failed to extract {archive}: {e}")
     try:
-        archive.unlink()
+        if not is_excluded(archive):
+            archive.unlink()
     except:
         pass
 
@@ -508,7 +555,7 @@ def cleanup_aux_files(game_folder: Path):
     for pat in patterns:
         for p in Path.cwd().rglob(pat):
             try:
-                if p.name.lower() in EXCLUDE_FILES_LOWER:
+                if is_excluded(p):
                     continue
                 p.unlink()
             except:
